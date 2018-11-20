@@ -1,0 +1,90 @@
+Create empty project
+
+create package.json file
+
+install react
+
+npm install --save react react-dom react-scripts
+
+install babel and webpack - babel is a javascript tanspiler used for JSX and ES6 to ES5 conversion
+
+npm install --save-dev @babel/core @babel/polyfill @babel/preset-env @babel/preset-react webpack webpack-cli webpack-dev-server
+
+create webpack.config.js
+create src and public (css/img) directories
+
+What is in src will be transpiled by babel and served along with what is in public.
+
+Create index.html file in your public directory:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Your Name" >
+    <meta name="description" content="" >
+    <meta name="theme-color" content="#000000">
+    <title>React Basic</title>
+</head>
+<body>
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+
+    <div id="react-todo"></div>
+    <script src="index.js" ></script>
+
+</body>
+</html>
+
+Create app.js and client.js files in your src directory:
+
+Client.js:
+
+import React from 'react';
+import ReactDom from 'react-dom';
+import App from './app';
+
+ReactDom.render(<App />, document.getElementById('react-todo'));
+
+App.js:
+
+import React from 'react';
+
+export default class App extends React.Component{
+
+    constructor(props){
+        super(props);
+
+    }
+
+    render(){
+        return <h1>Hello World!</h1>;
+    }
+}
+
+Add start script to package.json file:
+
+"scripts": {
+    "start": "webpack-dev-server"
+},
+
+Add babel presets to package.json file:
+
+"babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+  }
+
+Add webpack.config.js file:
+
+--file here
+
+
+
+
+
