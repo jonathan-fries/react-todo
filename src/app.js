@@ -1,5 +1,12 @@
 import React from 'react';
 
+import {
+    BrowserRouter
+} from "react-router-dom";
+
+import AppContainer from './components/appcontainer'
+
+
 export default class App extends React.Component{
 
     constructor(props){
@@ -8,6 +15,9 @@ export default class App extends React.Component{
     }
 
     render(){
-        return <h1>Hello World!</h1>;
+        return <BrowserRouter>
+            <AppContainer/>
+        </BrowserRouter>;
+
     }
 }

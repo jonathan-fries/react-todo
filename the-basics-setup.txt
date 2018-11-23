@@ -106,6 +106,24 @@ module.exports = {
 };
 
 
+------------------------------------------
+
+That's the basics - after that you should have a working react app.
+
+Now it is time to do more advanced stuff.
+
+First create your components directory.
+
+Then create your navigation.js file inside of it.
+
+Now import the react-router with npm:
+
+npm install --save react-router-dom
+
+This will install the react-router as a dependency.
+
+
+
 
 
 
