@@ -122,6 +122,107 @@ npm install --save react-router-dom
 
 This will install the react-router as a dependency.
 
+1. Creat components directory:
+2. Create appcontainer.js in components:
+
+import {Route} from "react-router-dom";
+import Home from "./home";
+import ToDoList from "./to-do-list";
+import React from 'react';
+import Navigation from './navigation';
+
+export default class Nav extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    render() {
+        return <Navigation>
+                <Route exact path="/" component={Home}/>
+                <Route path = "/todolist" component = {ToDoList} />
+            </Navigation>;
+    }
+}
+
+Create navigation.js in components:
+
+import React from 'react';
+import {Link, Route} from "react-router-dom";
+
+export default class Navigation extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    render() {
+        return <div><nav><ul className="header">
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/todolist">To Do List</Link></li>
+            </ul></nav>
+            {this.props.children}</div>;
+    }
+
+}
+
+3. Create home.js in components:
+
+import React from 'react';
+
+export default class Home extends React.Component{
+
+    constructor(props){
+        super(props);
+
+    }
+
+    render(){
+        return <h1>Hello World!</h1>;
+    }
+}
+
+4. Create to-do-list.js in components:
+
+import React from 'react';
+
+export default class ToDoList extends React.Component{
+
+    constructor(props){
+        super(props);
+
+    }
+
+    render(){
+        return <h1>To-Do List will go here!</h1>;
+    }
+}
+
+5. Change the app to show the appcontainer surrounded by BrowserRouter:
+
+import {
+    BrowserRouter
+} from "react-router-dom";
+
+*****
+
+render(){
+        return <BrowserRouter>
+            <AppContainer/>
+        </BrowserRouter>;
+
+
+
+-------
+
+References:
+
+Router:
+https://www.kirupa.com/react/creating_single_page_app_react_using_react_router.htm
+https://reactjs.org/docs/thinking-in-react.html
+
 
 
 
