@@ -1,5 +1,4 @@
-{
-  [
+[
     {
       "id": 1,
       "text": "Groceries"
@@ -10,7 +9,6 @@
     },
     {
       "id": 3,
-      "Work on Digital Transformation presentation."
+      "text" : "Work on Digital Transformation presentation."
     }
   ]
-}
