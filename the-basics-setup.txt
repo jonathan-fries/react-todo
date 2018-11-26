@@ -213,7 +213,123 @@ render(){
             <AppContainer/>
         </BrowserRouter>;
 
+-------
 
+Wire up the data:
+
+1. Step 1 - create data.json in your public folder:
+
+[
+    {
+      "id": 1,
+      "text": "Groceries"
+    },
+    {
+      "id": 2,
+      "text": "react tutorial"
+    },
+    {
+      "id": 3,
+      "text" : "Work on Digital Transformation presentation."
+    }
+  ]
+
+  2. Update to-do-list.js in component -
+
+import React from 'react';
+import ToDoTable from  './todotable';
+
+export default class ToDoList extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.state = {todoitems:[]};
+
+        var ws = "http://localhost:14173/data.json";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', ws);
+        xhr.onload = () => {
+            if(xhr.status === 200){
+                console.log(xhr.responseText);
+                var local_todoitems = [];
+                local_todoitems = JSON.parse(xhr.responseText);
+                this.setState({todoitems:local_todoitems});
+            }
+            else{
+                //error
+            }
+        };
+        xhr.send();
+
+    }
+
+    render(){
+        return <ToDoTable todoitems={this.state.todoitems}/>;
+    }
+}
+
+3. Create todotable.js:
+
+import React from 'react';
+import ToDoRow from './todorow';
+
+export default class ToDoTable extends React.Component{
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    render() {
+
+        const rows = [];
+
+        this.props.todoitems.forEach((todoitem) => {
+            rows.push(
+                <ToDoRow todoitem={todoitem}/>
+            );
+        });
+
+        return (
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>To Do:</th>
+                </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </table>
+        );
+    }
+
+}
+
+4. Create todorow.js:
+
+import React from 'react';
+
+export default class ToDoRow extends React.Component{
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    render() {
+        const todoitem = this.props.todoitem;
+
+        return (
+            <tr>
+                <td>{todoitem.id}</td>
+                <td>{todoitem.text}</td>
+                <td><input type="checkbox" /></td>
+            </tr>
+        );
+    }
+
+}
 
 -------
 

@@ -1,8 +1,3 @@
-import Navigation from "./navigation";
-import {Route} from "react-router-dom";
-import Home from "./home";
-import ToDoList from "./to-do-list";
-
 import React from 'react';
 import ToDoRow from './todorow';
 
