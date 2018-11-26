@@ -27,6 +27,17 @@ export default class ToDoList extends React.Component{
     }
 
     render(){
-        return <ToDoTable todoitems={this.state.todoitems}/>;
+        return <div>
+            <ToDoTable todoitems={this.state.todoitems}/>
+            <PrettyPrintJson todoitems={this.state.todoitems}/>
+        </div>;
+    }
+}
+
+class PrettyPrintJson extends React.Component {
+    render() {
+        // data could be a prop for example
+        const data  = this.props.todoitems;
+        return (<div><pre>{JSON.stringify(data, null, 2) }</pre></div>);
     }
 }
