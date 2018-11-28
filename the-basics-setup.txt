@@ -468,6 +468,12 @@ https://www.kirupa.com/react/creating_single_page_app_react_using_react_router.h
 Example with props:
 https://reactjs.org/docs/thinking-in-react.html
 
+Events across component boundaries:
+https://codepen.io/gaearon/pen/LzWZvb
+
+How to deal with arrays in state:
+https://www.robinwieruch.de/react-state-array-add-update-remove/
+
 The why of flux:
 https://facebook.github.io/flux/docs/in-depth-overview.html#content
 
