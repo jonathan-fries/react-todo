@@ -55,11 +55,6 @@ import React from 'react';
 
 export default class App extends React.Component{
 
-    constructor(props){
-        super(props);
-
-    }
-
     render(){
         return <h1>Hello World!</h1>;
     }
@@ -133,10 +128,6 @@ import Navigation from './navigation';
 
 export default class Nav extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-    }
 
     render() {
         return <Navigation>
@@ -153,10 +144,6 @@ import {Link, Route} from "react-router-dom";
 
 export default class Navigation extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-    }
 
     render() {
         return <div><nav><ul className="header">
@@ -173,11 +160,6 @@ export default class Navigation extends React.Component {
 import React from 'react';
 
 export default class Home extends React.Component{
-
-    constructor(props){
-        super(props);
-
-    }
 
     render(){
         return <h1>Hello World!</h1>;
@@ -324,7 +306,7 @@ export default class ToDoRow extends React.Component{
             <tr>
                 <td>{todoitem.id}</td>
                 <td>{todoitem.text}</td>
-                <td><input type="checkbox" /></td>
+                <td><input type="checkbox" checked={todoitem.done} /></td>
             </tr>
         );
     }
@@ -333,11 +315,161 @@ export default class ToDoRow extends React.Component{
 
 -------
 
+Add in two-way binding:
+
+1.  Update to-do-list:
+
+import React from 'react';
+import ToDoTable from  './todotable';
+
+export default class ToDoList extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.state = {todoitems:[]};
+
+        this.handleDoneChange = this.handleDoneChange.bind(this);
+
+        var ws = "http://localhost:14173/data.json";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', ws);
+        xhr.onload = () => {
+            if(xhr.status === 200){
+                console.log(xhr.responseText);
+                var local_todoitems = [];
+                local_todoitems = JSON.parse(xhr.responseText);
+                this.setState({todoitems:local_todoitems});
+            }
+            else{
+                //error
+            }
+        };
+        xhr.send();
+
+    }
+
+    handleDoneChange(value){
+        this.setState(state => {
+            const todoitems = state.todoitems.map((item, j) =>
+            {
+                if (j+1 === value) {
+                    item.done = !item.done;
+                    return item;
+                } else
+                    return item;
+
+            });
+            return todoitems;
+        });
+    }
+
+    render(){
+        return <div>
+            <ToDoTable OnDoneChange={this.handleDoneChange} todoitems={this.state.todoitems}/>
+            <PrettyPrintJson todoitems={this.state.todoitems}/>
+        </div>;
+    }
+}
+
+class PrettyPrintJson extends React.Component {
+    render() {
+        // data could be a prop for example
+        const data  = this.props.todoitems;
+        return (<div><pre>{JSON.stringify(data, null, 2) }</pre></div>);
+    }
+}
+
+2.  Update ToDoTable:
+
+import React from 'react';
+import ToDoRow from './todorow';
+
+export default class ToDoTable extends React.Component{
+
+    constructor(props) {
+        super(props);
+        //this.handleDoneChannge = this.handleDoneChannge.bind(this);
+        this.handleDoneChange = this.handleDoneChange.bind(this);
+
+    }
+
+    handleDoneChange(value){
+        this.props.OnDoneChange(value);
+    }
+
+    render() {
+
+        const rows = [];
+
+        this.props.todoitems.forEach((todoitem) => {
+            rows.push(
+                <ToDoRow key={todoitem.key} index={todoitem.key} todoitem={todoitem} OnChangeDone={this.handleDoneChange}/>
+            );
+        });
+
+        return (
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>To Do:</th>
+                </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </table>
+        );
+    }
+
+}
+
+3. Update ToDoItem:
+
+import React from 'react';
+
+export default class ToDoRow extends React.Component{
+
+    constructor(props) {
+        super(props);
+
+        this.handleDoneCheck = this.handleDoneCheck.bind(this);
+    }
+
+    handleDoneCheck(value){
+        this.props.OnChangeDone(value);
+    };
+
+    render() {
+        const todoitem = this.props.todoitem;
+
+        return (
+            <tr>
+                <td>{todoitem.key}</td>
+                <td>{todoitem.text}</td>
+                <td><input type="checkbox" checked={todoitem.done} onChange={() => this.handleDoneCheck(this.props.index)} /></td>
+            </tr>
+        );
+    }
+
+}
+
+-------
+
+
+
 References:
+
+Props v. State:
+https://lucybain.com/blog/2016/react-state-vs-pros/
 
 Router:
 https://www.kirupa.com/react/creating_single_page_app_react_using_react_router.htm
+
+Example with props:
 https://reactjs.org/docs/thinking-in-react.html
+
+The why of flux:
+https://facebook.github.io/flux/docs/in-depth-overview.html#content
 
 
 

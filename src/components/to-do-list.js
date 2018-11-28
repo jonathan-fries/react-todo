@@ -7,6 +7,8 @@ export default class ToDoList extends React.Component{
         super(props);
         this.state = {todoitems:[]};
 
+        this.handleDoneChange = this.handleDoneChange.bind(this);
+
         var ws = "http://localhost:14173/data.json";
 
         var xhr = new XMLHttpRequest();
@@ -26,9 +28,24 @@ export default class ToDoList extends React.Component{
 
     }
 
+    handleDoneChange(value){
+        this.setState(state => {
+            const todoitems = state.todoitems.map((item, j) =>
+            {
+                if (j+1 === value) {
+                    item.done = !item.done;
+                    return item;
+                } else
+                    return item;
+
+            });
+            return todoitems;
+        });
+    }
+
     render(){
         return <div>
-            <ToDoTable todoitems={this.state.todoitems}/>
+            <ToDoTable OnDoneChange={this.handleDoneChange} todoitems={this.state.todoitems}/>
             <PrettyPrintJson todoitems={this.state.todoitems}/>
         </div>;
     }

@@ -5,7 +5,13 @@ export default class ToDoTable extends React.Component{
 
     constructor(props) {
         super(props);
+        //this.handleDoneChannge = this.handleDoneChannge.bind(this);
+        this.handleDoneChange = this.handleDoneChange.bind(this);
 
+    }
+
+    handleDoneChange(value){
+        this.props.OnDoneChange(value);
     }
 
     render() {
@@ -14,7 +20,7 @@ export default class ToDoTable extends React.Component{
 
         this.props.todoitems.forEach((todoitem) => {
             rows.push(
-                <ToDoRow todoitem={todoitem}/>
+                <ToDoRow key={todoitem.key} index={todoitem.key} todoitem={todoitem} OnChangeDone={this.handleDoneChange}/>
             );
         });
 

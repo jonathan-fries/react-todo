@@ -1,14 +1,17 @@
 [
     {
-      "id": 1,
-      "text": "Groceries"
+      "key": 1,
+      "text": "Groceries",
+      "done": false
     },
     {
-      "id": 2,
-      "text": "react tutorial"
+      "key": 2,
+      "text": "react tutorial",
+      "done": false
     },
     {
-      "id": 3,
-      "text" : "Work on Digital Transformation presentation."
+      "key": 3,
+      "text" : "Work on Digital Transformation presentation.",
+      "done": true
     }
   ]
