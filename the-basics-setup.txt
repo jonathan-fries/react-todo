@@ -1,16 +1,25 @@
 Create empty project
 
-create package.json file
+create package.json file:
 
-install react
+{
+  "name": "react-todo-demo",
+  "version": "1.0.0",
+  "dependencies": {
+  }
+}
 
+Install React:
+
+Run command line:
 npm install --save react react-dom react-scripts
 
-install babel and webpack - babel is a javascript tanspiler used for JSX and ES6 to ES5 conversion
+Install babel and webpack - babel is a javascript tanspiler used for JSX and ES6 to ES5 conversion
 
+Run command line:
 npm install --save-dev @babel/core @babel/polyfill @babel/preset-env @babel/preset-react webpack webpack-cli webpack-dev-server
 
-create webpack.config.js
+Create webpack.config.js
 create src and public (css/img) directories
 
 What is in src will be transpiled by babel and served along with what is in public.
@@ -99,6 +108,8 @@ module.exports = {
         ]
     }
 };
+
+You can now run your app by calling 'npm start' from the command line:
 
 
 ------------------------------------------
@@ -476,9 +487,3 @@ https://www.robinwieruch.de/react-state-array-add-update-remove/
 
 The why of flux:
 https://facebook.github.io/flux/docs/in-depth-overview.html#content
-
-
-
-
-
-
