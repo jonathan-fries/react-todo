@@ -118,18 +118,59 @@ That's the basics - after that you should have a working react app.
 
 Now it is time to do more advanced stuff.
 
-First create your components directory.
-
-Then create your navigation.js file inside of it.
-
-Now import the react-router with npm:
+Import the react-router with npm:
 
 npm install --save react-router-dom
 
 This will install the react-router as a dependency.
 
-1. Creat components directory:
-2. Create appcontainer.js in components:
+1. Create components directory under the src directory.
+2. Create home.js in components:
+
+import React from 'react';
+
+export default class Home extends React.Component{
+
+    render(){
+        return <h1>Hello World!</h1>;
+    }
+}
+
+3. Create to-do-list.js in components:
+
+import React from 'react';
+
+export default class ToDoList extends React.Component{
+
+    constructor(props){
+        super(props);
+
+    }
+
+    render(){
+        return <h1>To-Do List will go here!</h1>;
+    }
+}
+
+4. Create navigation.js in components:
+
+import React from 'react';
+import {Link, Route} from "react-router-dom";
+
+export default class Navigation extends React.Component {
+
+
+    render() {
+        return <div><nav><ul className="header">
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/todolist">To Do List</Link></li>
+            </ul></nav>
+            {this.props.children}</div>;
+    }
+
+}
+
+5. Create appcontainer.js in components:
 
 import {Route} from "react-router-dom";
 import Home from "./home";
@@ -148,63 +189,23 @@ export default class Nav extends React.Component {
     }
 }
 
-Create navigation.js in components:
+6. Change the app to show the appcontainer surrounded by BrowserRouter:
 
 import React from 'react';
-import {Link, Route} from "react-router-dom";
-
-export default class Navigation extends React.Component {
-
-
-    render() {
-        return <div><nav><ul className="header">
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/todolist">To Do List</Link></li>
-            </ul></nav>
-            {this.props.children}</div>;
-    }
-
-}
-
-3. Create home.js in components:
-
-import React from 'react';
-
-export default class Home extends React.Component{
-
-    render(){
-        return <h1>Hello World!</h1>;
-    }
-}
-
-4. Create to-do-list.js in components:
-
-import React from 'react';
-
-export default class ToDoList extends React.Component{
-
-    constructor(props){
-        super(props);
-
-    }
-
-    render(){
-        return <h1>To-Do List will go here!</h1>;
-    }
-}
-
-5. Change the app to show the appcontainer surrounded by BrowserRouter:
-
 import {
     BrowserRouter
 } from "react-router-dom";
 
-*****
+import AppContainer from './components/appcontainer'
 
-render(){
-        return <BrowserRouter>
-            <AppContainer/>
-        </BrowserRouter>;
+export default class App extends React.Component{
+
+  render(){
+      return <BrowserRouter>
+          <AppContainer/>
+      </BrowserRouter>;
+    }
+}
 
 -------
 
@@ -214,20 +215,23 @@ Wire up the data:
 
 [
     {
-      "id": 1,
-      "text": "Groceries"
+      "key": 1,
+      "text": "Groceries",
+      "done": false
     },
     {
-      "id": 2,
-      "text": "react tutorial"
+      "key": 2,
+      "text": "react tutorial",
+      "done": false
     },
     {
-      "id": 3,
-      "text" : "Work on Digital Transformation presentation."
+      "key": 3,
+      "text" : "Work on Digital Transformation presentation.",
+      "done": true
     }
   ]
 
-  2. Update to-do-list.js in component -
+2. Update to-do-list.js in component -
 
 import React from 'react';
 import ToDoTable from  './todotable';
@@ -258,7 +262,18 @@ export default class ToDoList extends React.Component{
     }
 
     render(){
-        return <ToDoTable todoitems={this.state.todoitems}/>;
+        return <div>
+            <ToDoTable OnDoneChange={this.handleDoneChange} todoitems={this.state.todoitems}/>
+            <PrettyPrintJson todoitems={this.state.todoitems}/>
+        </div>;
+    }
+}
+
+class PrettyPrintJson extends React.Component {
+    render() {
+        // data could be a prop for example
+        const data  = this.props.todoitems;
+        return (<div><pre>{JSON.stringify(data, null, 2) }</pre></div>);
     }
 }
 
@@ -328,7 +343,80 @@ export default class ToDoRow extends React.Component{
 
 Add in two-way binding:
 
-1.  Update to-do-list:
+1.  Update ToDoRow:
+
+import React from 'react';
+
+export default class ToDoRow extends React.Component{
+
+    constructor(props) {
+        super(props);
+
+        this.handleDoneCheck = this.handleDoneCheck.bind(this);
+    }
+
+    handleDoneCheck(value){
+        this.props.OnChangeDone(value);
+    };
+
+    render() {
+        const todoitem = this.props.todoitem;
+
+        return (
+            <tr>
+                <td>{todoitem.key}</td>
+                <td>{todoitem.text}</td>
+                <td><input type="checkbox" checked={todoitem.done} onChange={() => this.handleDoneCheck(this.props.index)} /></td>
+            </tr>
+        );
+    }
+
+}
+
+2.  Update ToDoTable:
+
+import React from 'react';
+import ToDoRow from './todorow';
+
+export default class ToDoTable extends React.Component{
+
+    constructor(props) {
+        super(props);
+        //this.handleDoneChannge = this.handleDoneChannge.bind(this);
+        this.handleDoneChange = this.handleDoneChange.bind(this);
+
+    }
+
+    handleDoneChange(value){
+        this.props.OnDoneChange(value);
+    }
+
+    render() {
+
+        const rows = [];
+
+        this.props.todoitems.forEach((todoitem) => {
+            rows.push(
+                <ToDoRow key={todoitem.key} index={todoitem.key} todoitem={todoitem} OnChangeDone={this.handleDoneChange}/>
+            );
+        });
+
+        return (
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>To Do:</th>
+                </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </table>
+        );
+    }
+
+}
+
+3.  Update to-do-list:
 
 import React from 'react';
 import ToDoTable from  './todotable';
@@ -391,78 +479,6 @@ class PrettyPrintJson extends React.Component {
     }
 }
 
-2.  Update ToDoTable:
-
-import React from 'react';
-import ToDoRow from './todorow';
-
-export default class ToDoTable extends React.Component{
-
-    constructor(props) {
-        super(props);
-        //this.handleDoneChannge = this.handleDoneChannge.bind(this);
-        this.handleDoneChange = this.handleDoneChange.bind(this);
-
-    }
-
-    handleDoneChange(value){
-        this.props.OnDoneChange(value);
-    }
-
-    render() {
-
-        const rows = [];
-
-        this.props.todoitems.forEach((todoitem) => {
-            rows.push(
-                <ToDoRow key={todoitem.key} index={todoitem.key} todoitem={todoitem} OnChangeDone={this.handleDoneChange}/>
-            );
-        });
-
-        return (
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>To Do:</th>
-                </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </table>
-        );
-    }
-
-}
-
-3. Update ToDoItem:
-
-import React from 'react';
-
-export default class ToDoRow extends React.Component{
-
-    constructor(props) {
-        super(props);
-
-        this.handleDoneCheck = this.handleDoneCheck.bind(this);
-    }
-
-    handleDoneCheck(value){
-        this.props.OnChangeDone(value);
-    };
-
-    render() {
-        const todoitem = this.props.todoitem;
-
-        return (
-            <tr>
-                <td>{todoitem.key}</td>
-                <td>{todoitem.text}</td>
-                <td><input type="checkbox" checked={todoitem.done} onChange={() => this.handleDoneCheck(this.props.index)} /></td>
-            </tr>
-        );
-    }
-
-}
 
 -------
 
